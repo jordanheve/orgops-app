@@ -1,6 +1,7 @@
 import { client } from './turso';
 import bcrypt from 'bcryptjs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Crypto from 'expo-crypto';
 
 export interface User {
   id?: number;
@@ -8,6 +9,10 @@ export interface User {
   email: string;
   role: string;
 }
+bcrypt.setRandomFallback((len) => {
+  const array = Crypto.getRandomValues(new Uint8Array(len));
+  return Array.from(array);
+});
 
 export const AuthService = {
   // Guarda la sesión físicamente en el teléfono
@@ -27,18 +32,21 @@ export const AuthService = {
     } catch (e) {
       console.log("Error obteniendo sesión:", e);
       return null;
-
     }
   },
 
   // Registra nuevos usuarios con contraseña encriptada
   async register(name: string, email: string, password: string) {
     try {
-      const hashedPassword = await bcrypt.hash(password, 10);
+      // Generamos el salt y el hash usando bcryptjs
+      const salt = await bcrypt.genSalt(10); 
+      const hashedPassword = await bcrypt.hash(password, salt);
+
       const result = await client.execute({
         sql: "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, 'staff')",
         args: [name, email, hashedPassword]
       });
+
       return { success: true, result };
     } catch (error: any) {
       console.error("Error en registro:", error);

@@ -16,6 +16,15 @@ export default function AuthScreen() {
   const validateEmail = (email: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
+  const validatePassword = (password: string) => {
+  // Regex: 
+  // (?=.*[A-Z]) -> Al menos una mayúscula
+  // (?=.*\d) -> Al menos un número
+  // (?=.*[@$!%*?&]) -> Al menos un caracter especial
+  // {8,} -> Mínimo 8 caracteres
+  const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-A-z\d@$!%*?&]{8,}$/;
+  return passwordRegex.test(password);
+}
 
   const handleAuth = async () => {
     let currentErrors = { name: '', email: '', password: '', general: '' };
@@ -30,8 +39,15 @@ export default function AuthScreen() {
       currentErrors.email = "Ingresa un correo válido";
       isValid = false;
     }
-    if (form.password.length < 6) {
-      currentErrors.password = "La contraseña debe tener al menos 6 caracteres";
+
+
+    if (!validatePassword(form.password) || form.password.length == 0) {
+
+      if(form.password.length == 0) {
+        currentErrors.password = "La contraseña es requerida";
+      }else {
+      currentErrors.password = "La contraseña debe tener al menos 8 caracteres y contener una mayúscula, un número y un carácter especial";
+      }
       isValid = false;
     }
 

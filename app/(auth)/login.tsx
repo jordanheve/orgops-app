@@ -22,7 +22,7 @@ export default function AuthScreen() {
   // (?=.*\d) -> Al menos un número
   // (?=.*[@$!%*?&]) -> Al menos un caracter especial
   // {8,} -> Mínimo 8 caracteres
-  const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-A-z\d@$!%*?&]{8,}$/;
+  const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   return passwordRegex.test(password);
 }
 

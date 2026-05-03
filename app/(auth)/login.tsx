@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
 // Importamos el servicio que creamos
-import { AuthService } from '../lib/auth';
+import { AuthService } from '../../lib/auth';
 
 export default function AuthScreen() {
   const [isLogin, setIsLogin] = useState(true);
